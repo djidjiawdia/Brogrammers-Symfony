@@ -1,20 +1,85 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello EtudiantController!{% endblock %}
+{% block title %}Etudiants{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+    <div>
+        <a class="btn btn-outline-primary btn-sm" href="{{ path('add_student') }}">
+            <span><i class="fas fa-plus"></i></span>
+            Ajouter
+        </a>
+    </div>
+    <div>
+        <form class="d-flex justify-content-end mt-2" action="" method="post" id="formSearch">
+            <div class="row align-items-center">
+                <div class="col-8 d-flex justify-content-end">
+                    <input type="text" name="mat" id="mat" class="form-control mb-2 mr-2" placeholder="Matricule">
+                    <input type="text" name="num" id="num" class="form-control mb-2 mr-2" placeholder="Num chambre">
+                    <select name="type" id="type"  class="form-control mb-2 mr-2">
+                        <option value="" selected disabled>Type</option>
+                        <option value="non_boursier">Non Boursier</option>
+                        <option value="boursier">Boursier</option>
+                        <option value="logier">Logier</option>
+                        <option value="non_logier">Non Logier</option>
+                    </select>
+                </div>
+                <div class="col-4">
+                    <button type="submit" class="btn btn-primary btn-sm mb-2 mr-2">Chercher</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-11">
+        <div class="table-responsive" id="scrollZone">
+            <table class="table table-bordered table-hover text-center">
+                <thead>
+                    <tr>
+                        <th>Matricule</th>
+                        <th>Prenom</th>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Téléphone</th>
+                        <th>Bourse</th>
+                        <th>Chambre</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/Jah Ji/Documents/Symfony/brogrammers/src/Controller/EtudiantController.php'|file_link(0) }}">src/Controller/EtudiantController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/Jah Ji/Documents/Symfony/brogrammers/templates/etudiant/index.html.twig'|file_link(0) }}">templates/etudiant/index.html.twig</a></code></li>
-    </ul>
-</div>
+{% block javascripts %}
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        let text = '';
+        $(document).ready(function(){
+            let offset = 0;
+            let mat = "";
+            let num = "";
+            let type = "";
+            const tbody = $("#tbody");
+            $.ajax({
+                url: '{{ path('student_table') }}',
+                type: 'POST',
+                data: {limit: 2, offset: offset, mat: mat, num: num, type: type},
+                beforeSend: function(){
+                    tbody.html('<tr><td colspan="8">Loading...</td></tr>')
+                },
+                success: function(res){
+                    console.log(res)
+                    /*tbody.html('')
+                    if(res != ''){
+                        tbody.html(res);
+                        offset += 2;
+                    }else{
+                        tbody.html('<tr><td colspan="8">Not Found</td></tr>');
+                    }*/
+                }
+            });
+        });
+    </script>
 {% endblock %}

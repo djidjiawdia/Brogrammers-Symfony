@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <title>Brogrammers</title>
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" >
+        <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap.min.css') }}" >
         <link rel="stylesheet" href="{{ asset('css/style.css') }}" >
         {% block stylesheets %}{% endblock %}
     </head>
@@ -17,8 +18,8 @@
                     Gestion d'allocation des chambres
                 </div>
                 <ul>
-                    <li class="{% if current == 'students' %}active{% endif %}"><a href="/">Liste des étudiants</a></li>
-                    <li class="{% if current == 'rooms' %}active{% endif %}"><a href="{{ path('rooms') }}">Liste des chambres</a></li>
+                    <li class="{% if current == 'students' %}active{% endif %}"><a href="{{ path('students') }}">Liste des étudiants {{ current }} </a></li>
+                    <li class="{% if current == 'rooms' %}active{% endif %}"><a href="{{ path('rooms') }}">Liste des chambres {{ current }} </a></li>
                 </ul>
             </div>
             <div class="content">
@@ -34,6 +35,7 @@
         <script src="{{ asset('js/all.min.js') }}"></script>
         <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('js/validator.js') }}"></script>
         <script src="{{ asset('js/script.js') }}"></script>
         {% block javascripts %}{% endblock %}

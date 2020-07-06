@@ -2,11 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Batiment;
 use App\Entity\Chambre;
 use App\Form\ChambreType;
 use App\Repository\ChambreRepository;
-use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ChambreController extends AbstractController
 {
     private $repo;
+    private $cuurent;
 
     public function __construct(ChambreRepository $repo)
     {
-        $this->repo = $repo;   
+        $this->repo = $repo;
+        $this->current = "rooms";
     }
 
     /**
@@ -27,7 +27,7 @@ class ChambreController extends AbstractController
     public function index()
     {
         return $this->render('chambre/index.html.twig', [
-            'current' => 'rooms'
+            'current' => $this->current
         ]);
     }
 
@@ -53,7 +53,7 @@ class ChambreController extends AbstractController
         }
         return $this->render('chambre/ajout.html.twig', [
             "form" => $form->createView(),
-            "current" => "rooms",
+            "current" => $this->current,
             "id" => $id
         ]);
     }

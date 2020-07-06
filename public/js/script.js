@@ -9,17 +9,7 @@ $(document).ready(function(){
             $(".btn-menu span").html('<i class="fas fa-bars"></i>');
         }
     });
-
-    /** Navigation **/
-    const link = location.href.split('/')[4];
-    if(link !== ""){
-        $("ul li").each((i, el) => {
-            el.classList.remove("active");
-            if(el.children[0].href.split('/')[4] == link){
-                el.classList.add("active");
-            }
-        })
-    }
+    
     // On change
     $("#chambre_batiment").on("change", function(){
         $("#chambre_numero").val(generateNumChambre(parseInt($("#lastId").val())+1, $(this).val()));
