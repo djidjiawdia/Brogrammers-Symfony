@@ -38,12 +38,15 @@ function getFieldName(input) {
 
 function showError(field, message){
     field.addClass('is-invalid');
-    field.parent().children('small').html(message);
+    field.parent().append(`<small class="text-danger">${message}</small>`);
 }
 
 function hideError(field){
+    const small = field.parent().children('small');
     field.removeClass('is-invalid');
-    field.parent().children('small').html('');
+    if(small){
+        small.remove();
+    }
 }
 
 function validWithRegex(val, regex){

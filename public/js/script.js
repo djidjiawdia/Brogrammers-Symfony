@@ -21,36 +21,12 @@ $(document).ready(function(){
         })
     }
     // On change
-    $("#numBat").on("change", function(){
-        $("#num").val(generateNumChambre(parseInt($("#lastId").val())+1, $(this).val()));
+    $("#chambre_batiment").on("change", function(){
+        $("#chambre_numero").val(generateNumChambre(parseInt($("#lastId").val())+1, $(this).val()));
     });
 
     // Focus Out
-    $("#numBat").on("focusout", function(){checkRequired([$(this)])});
-
-    // Form Ajouter une chambre
-    $("#formAddRoom").on("submit", function(e){
-        e.preventDefault();
-        if(checkRequired([$("#numBat")]) && checkOption([$("#type")])){
-            $.ajax({
-                url: $(this).attr("action"),
-                type: 'post',
-                data: $(this).serialize(),
-                dataType: 'json',
-                success: function(res){
-                    console.log(res);
-                    if(res.type == "success"){
-                        $("#formAddRoom")[0].reset();
-                        $("#alert").addClass("alert-success");
-                    }else{
-                        $("#alert").addClass("alert-danger");
-                    }
-                    $("#alert").html(res.message);
-                    $("#alert").show();
-                }
-            })
-        }
-    })
+    $("#chambre_batiment").on("focusout", function(){checkRequired([$(this)])});
 
     // Form Ajouter Etudiant
     $("#formAddStud").on("submit", function(e){

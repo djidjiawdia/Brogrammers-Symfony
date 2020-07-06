@@ -17,8 +17,8 @@
                     Gestion d'allocation des chambres
                 </div>
                 <ul>
-                    <li class="active"><a href="<?= ROOT ?>/etudiant">Liste des étudiants</a></li>
-                    <li><a href="<?= ROOT ?>/chambre">Liste des chambres</a></li>
+                    <li class="{% if current == 'students' %}active{% endif %}"><a href="/">Liste des étudiants</a></li>
+                    <li class="{% if current == 'rooms' %}active{% endif %}"><a href="{{ path('rooms') }}">Liste des chambres</a></li>
                 </ul>
             </div>
             <div class="content">
@@ -30,6 +30,12 @@
                 </div>
             </div>
         </div>
+
+        <script src="{{ asset('js/all.min.js') }}"></script>
+        <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('js/validator.js') }}"></script>
+        <script src="{{ asset('js/script.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -3,5 +3,10 @@
 {% block title %}Chambres{% endblock %}
 
 {% block body %}
-    Listes des chambres
+    <div>
+        <a class="btn btn-outline-primary btn-sm" href="{{ path('add_room') }}">
+            <span><i class="fas fa-plus"></i></span>
+            Ajouter
+        </a>
+    </div>
 {% endblock %}

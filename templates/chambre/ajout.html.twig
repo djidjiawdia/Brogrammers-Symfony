@@ -2,8 +2,25 @@
 
 {% block title %}Ajouter Chambre{% endblock %}
 
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% block body %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
+    <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="alert" id="alert">
+        </div>
+        {{ form_start(form, {'attr': {'id': 'formAddRoom'}} ) }}
+        {{ form_row(form.numero, {'label': 'Numéro de Chambre', 'label_attr': {'class': 'font-weight-bold'}, 'attr': {'readonly': ''} }) }}
+        {{ form_row(form.type, {'label': 'Type de Chambre', 'label_attr': {'class': 'font-weight-bold'}, 'attr': {'id': 'type', 'class': 'd-flex justify-content-around'} }) }}
+        {{ form_row(form.batiment, {'label': 'Batiment', 'label_attr': {'class': 'font-weight-bold'} }) }}
+        <input type="hidden" id="lastId" value="{{ id }}">
+        <button type="submit" class="btn btn-primary btn-sm">Valider</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        $(document).ready(function(){
+             $("#chambre_numero").val(generateNumChambre(parseInt($("#lastId").val())+1, $('#chambre_batiment').val()));
+        })
+    </script>
 {% endblock %}
