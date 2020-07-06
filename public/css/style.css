@@ -1,0 +1,205 @@
+
+:root{
+    --my-primary-color: #403B3B;
+}
+
+.main{
+    display: flex;
+    width: 100vw;
+    height: 100%;
+    min-height: 100vh;
+}
+
+.btn-menu{
+    padding: 0.5rem 1rem;
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background-color: #fff;
+    color: var(--my-primary-color);
+    font-size: 1.5rem;
+    z-index: 990;
+    border-radius: 3px;
+    cursor: pointer;
+    display: none;
+}
+
+.menu{
+    width: 20%;
+    background-color: var(--my-primary-color);
+    display: flex;
+    flex-direction: column;
+}
+
+.brand{
+    color: white;
+    border-bottom: 2px solid white;
+    padding: 20px 12px;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.menu ul{
+    list-style: none;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-inline-start: 0;
+}
+
+.menu ul li{
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu ul li a{
+    width: 100%;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1rem;
+    color: white;
+}
+
+.active{
+    background-color: white;
+}
+.active a{
+    color: var(--my-primary-color) !important;
+}
+
+.content{
+    width: 80%;
+    min-height: 80vh;
+    /* height: 100%; */
+    margin: 20px;
+    border: 1px solid var(--my-primary-color);
+    /* overflow: hidden; */
+}
+
+#scrollZone{
+    max-height: 200px;
+    overflow: scroll;
+}
+
+.title{
+    width: 100%;
+    height: 30px;
+    padding: 0 12px;
+    color: white;
+    font-size: 1.25rem;
+    font-weight: bold;
+    background-color: var(--my-primary-color);
+}
+
+.wrapper{
+    width: 100%;
+    height: 80vh;
+}
+
+.form-search{
+    display: flex;
+}
+
+.pagination{
+    display: flex;
+    align-items: center;
+}
+
+#numbers {
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    /* overflow: hidden; */
+}
+
+#numbers li{
+    margin: 0 4px;
+    /* border: 1px solid var(--my-primary-color); */
+    border-radius: 4px;
+}
+
+#numbers li a {
+    color: var(--my-primary-color);
+    padding: 1rem;
+    font-size: 1.5rem;
+	text-decoration: none;
+	opacity: .6;
+}
+
+#numbers li a:hover {
+	opacity: 1;
+}
+
+#numbers li.pagination_active {
+	background: blue;
+}
+
+#numbers li.pagination_active a {
+	opacity: 1;
+	color: #fff;
+}
+
+
+@media screen and (max-width: 575px){
+    .btn-menu{
+        display: block;
+    }
+    
+    .menu{
+        display: none;
+        position: absolute;
+        width: 70%;
+        height: 100%;
+    }
+    
+    .content{
+        width: 100%;
+        height: 90vh;
+        margin-top: 5rem;
+        z-index: -100;
+    }
+    
+}
+/* 
+@media screen and (min-width: 481px) and (max-width: 768px){
+
+    
+} */
+
+@media screen and (min-width: 576px) and (max-width: 992px){
+    .main{
+        flex-wrap: wrap;
+    }
+    .menu{
+        width: 100%;
+        height: 8vh;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .brand{
+        padding: 12px 12px;
+        border-bottom: none;
+    }
+
+    .menu ul{
+        flex-direction: row;
+        margin: 0;
+    }
+    
+    .menu ul li{
+        margin-right: 25px;
+        height: 100%;
+        width: 90px;
+        text-align: center;
+    }
+
+    .content{
+        width: 100%;
+        height: 92vh;
+    }
+}
