@@ -19,8 +19,6 @@
                         <option value="" selected disabled>Type</option>
                         <option value="non_boursier">Non Boursier</option>
                         <option value="boursier">Boursier</option>
-                        <option value="logier">Logier</option>
-                        <option value="non_logier">Non Logier</option>
                     </select>
                 </div>
                 <div class="col-4">
@@ -70,16 +68,134 @@
                     tbody.html('<tr><td colspan="8">Loading...</td></tr>')
                 },
                 success: function(res){
-                    console.log(res)
-                    /*tbody.html('')
-                    if(res != ''){
-                        tbody.html(res);
+                    tbody.html('')
+                    if(res.code == 200){
+                        tbody.html(res.message);
                         offset += 2;
                     }else{
                         tbody.html('<tr><td colspan="8">Not Found</td></tr>');
-                    }*/
+                    }
                 }
             });
+
+            const scrollZone = $('#scrollZone')
+            scrollZone.scroll(() => {
+                const st = scrollZone[0].scrollTop;
+                const sh = scrollZone[0].scrollHeight;
+                const ch = scrollZone[0].clientHeight;
+
+
+                if(Math.ceil(sh-st)-1 <= ch){
+                    $.ajax({
+                        url: '{{ path('student_table') }}',
+                        type: 'POST',
+                        data: {limit: 2, offset: offset, mat: mat, num: num, type: type},
+                        success: function(res){
+                            tbody.append(res.message);
+                            offset += 2;
+                        }
+                    });
+                }
+            })
+
+            $("#formSearch").on("submit", function(e){
+                e.preventDefault();
+                offset = 0;
+                mat = $("#mat").val();
+                num = $("#num").val();
+                type = $("#type").val();
+                $.ajax({
+                    url: '{{ path('student_table') }}',
+                    type: 'POST',
+                    data: {limit: 2, offset: offset, mat: mat, num: num, type: type},
+                    beforeSend: function(){
+                        tbody.html('<tr><td colspan="8">Loading...</td></tr>')
+                    },
+                    success: function(res){
+                        tbody.html('')
+                        if(res.code == 200){
+                            tbody.html(res.message);
+                            offset += 2;
+                        }else{
+                            tbody.html('<tr><td colspan="8">Not Found</td></tr>');
+                        }
+                    }
+                });
+            });   
         });
+
+        $(document).on("click", ".deleteStud", function(){
+            if(confirm("Voulez-vous supprimer")){
+                $.ajax({
+                    url: '{{ path() }}',
+                    type: 'POST',
+                    data: {id: $(this).attr("id")},
+                    dataType: 'JSON',
+                    success: function(res){
+                        if(res.type == 'success'){
+                            alert(res.message);
+                            location.reload();
+                        }
+                    }
+                })
+            }
+        });
+
+        $(document).on('dblclick', '.edit', function(e){
+            e.preventDefault();
+            $(this).prop('disabled', true);
+            text = $(this).text();
+            const id = $(this).parent().attr("id");
+            const name = $(this).attr("id");
+            const input = `<input class="form-control w-100" type="text" id="inputChange" data-id="${id}" name="${name}" value="${text}" placeholder="Entrer ${name}">`; 
+            $(this).html(input);
+            $(this).children().focus();
+        })
+        $(document).on('focusout', '.edit', function(){
+            $(this).html(text);
+        });
+        $(document).on('keyup', ".edit", function(e){
+            if(e.keyCode == 27){ // Touche echap
+                $(this).html(text);
+            }else if(e.keyCode == 13){ // Touche entrée
+                const data = {
+                    "id": $("#inputChange").attr("data-id"),
+                    "champ": $(this).attr("id"),
+                    "val": $("#inputChange").val()
+                };
+                if(data.val == ''){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else if(data.champ == 'nom' && !validWithRegex(data.val, /^[A-Za-z]*$/)){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else if(data.champ == 'prenom' && !validWithRegex(data.val, /^[A-Za-z ]*$/)){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else if(data.champ == 'email' && !validWithRegex(data.val, /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else if(data.champ == 'tel' && !validWithRegex(data.val, /(7[7860])+([0-9]{7})$/)){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else{
+                    $.ajax({
+                        url: '<?= ROOT ?>/etudiant/updateEtudiant',
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        success: function(res){
+                            if(res.type == "success"){
+                                alert(res.message);
+                            }else{
+                                alert(res.message);
+                                return;
+                            }        
+                        }
+                    });
+                    $(this).html($("#inputChange").val());
+                }
+            }
+        })
     </script>
 {% endblock %}
