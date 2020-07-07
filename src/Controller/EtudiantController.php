@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\EtudiantRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -39,10 +40,10 @@ class EtudiantController extends AbstractController
             $tr = '
                 <tr id="'. $d->getId() .'">
                     <td>'.$d->getMatricule() .'</td>
-                    <td class="edit" id="prenom">'. $d->getPrenom().'</td>
-                    <td class="edit" id="nom">'. strtoupper($d->getNom()).'</td>
-                    <td class="edit" id="email">'. $d->getEmail().'</td>
-                    <td class="edit" id="tel">'. $d->getTel().'</td>';
+                    <td class="edit" id="setPrenom">'. $d->getPrenom().'</td>
+                    <td class="edit" id="setNom">'. strtoupper($d->getNom()).'</td>
+                    <td class="edit" id="setEmail">'. $d->getEmail().'</td>
+                    <td class="edit" id="setTel">'. $d->getTel().'</td>';
                     if($d->getType() == "boursier"){
                         $tr .= '<td>'. $d->getMontant().'</td>';
                         if($d->getStatut() == "logier"){
@@ -72,5 +73,28 @@ class EtudiantController extends AbstractController
         return $this->render('etudiant/ajout.html.twig', [
             'current' => 'students',
         ]);
+    }
+
+    /**
+     * @Route("/etudiant/update", name="update_student")
+     */
+    public function update(EtudiantRepository $repo, EntityManagerInterface $em) : Response
+    {
+        extract($_POST);
+        $etudiant = $repo->findOneBy(['id' => $id]);
+        $etudiant->{$champ}($val);
+        $em->flush();
+        return $this->json(['code' => 200, 'message' => 'modifié'], 200);
+    }
+
+    /**
+     * @Route("/etudiant/delete", name="delete_student")
+     */
+    public function delete(EtudiantRepository $repo, EntityManagerInterface $em) : Response
+    {
+        $etudiant = $repo->findOneBy(['id' => $_POST['id']]);
+        $em->remove($etudiant);
+        $em->flush();
+        return $this->json(['code' => 200, 'message' => 'supprimé'], 200);
     }
 }
