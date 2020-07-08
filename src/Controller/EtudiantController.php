@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Etudiant;
+use App\Form\EtudiantType;
 use App\Repository\EtudiantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -65,16 +67,18 @@ class EtudiantController extends AbstractController
         return $this->json(["code" => 200, "message" => $body]);
     }
 
-    /**
-     * @Route("/etudiants/nouveau", name="add_student")
+   /**
+     * @Route("/etudiant/add", name="add_student")
      */
     public function add()
     {
-        return $this->render('etudiant/ajout.html.twig', [
-            'current' => 'students',
-        ]);
+        $etudiant=new Etudiant();
+        $form = $this->createForm(EtudiantType::class, $etudiant);
+       return $this->render('etudiant/ajout.html.twig', [
+        'form' => $form->createView(),
+        'current' => 'student'
+    ]);
     }
-
     /**
      * @Route("/etudiant/update", name="update_student")
      */

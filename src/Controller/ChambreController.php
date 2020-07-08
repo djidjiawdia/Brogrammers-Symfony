@@ -37,7 +37,7 @@ class ChambreController extends AbstractController
     public function add(Request $request, EntityManagerInterface $em)
     {
         $chambre = new Chambre;
-        $chambre->setNumero('001-0001');
+        // $chambre->setNumero('001-0001');
         $last = $this->repo->findOneBy([], ['id' => 'desc']);
         if($last){
             $id = $last->getId();

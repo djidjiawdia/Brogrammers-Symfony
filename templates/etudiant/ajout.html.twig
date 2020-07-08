@@ -1,13 +1,142 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter un étudiant{% endblock %}
+{% block title %}Ajouter Etudiant{% endblock %}
 
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% block body %}
-    <div>
-        <a class="btn btn-outline-primary btn-sm" href="{{ path('add_student') }}">
-            <span><i class="fas fa-plus"></i></span>
-            Ajouter
-        </a>
+ <div class='container'>
+    <div class="container  d-flex align-items-center justify-content-center mt-3">
+
+<form class="border col-md-6 rounded p-4 contenue" >
+  <div class="form-row ">
+  
+    <div class="form-group col-md-6">
+    
+      <label for="inputEmail4">Nom</label>
+      <input type="text" class="form-control" id="inputEmail4">
     </div>
-Liste etudiants
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Prenom</label>
+      <input type="text" class="form-control" id="inputPassword4">
+    </div>
+
+  </div>
+
+
+  <div class="form-row">
+  
+    <div class="form-group col-md-6">
+    
+        <label for="inputEmail4">Email</label>
+        <input type="email" class="form-control" id="inputEmail4">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Telephone</label>
+      <input type="text" class="form-control" id="inputPassword4">
+    </div>
+
+  </div>
+
+
+<div class="form-row">
+     
+   <div class="form-type col-md-5 mt-4 pt-2 ">
+        <select  class="custom-select" name="type_reponse" id="type_reponse" required>
+            <option value="0" selected>Entrer le type d'étudiant</option>
+            <option value="texte"onclick="addPension()" >Boursier non logé</option>
+            <option value="boursier_logé" onclick='addPensionNum()' >Boursier logé</option>
+            <option value="non_boursier" onclick="addAdresse()"> Non boursier</option>
+        </select>
+        <img src="/img/ok.jpg" style="height: 20px;" class='genere' id="genere" onclick="add()" alt="ajout" >
+    </div>
+</div>
+    <div id="inputs">
+
+    </div>
+                            
+   
+    <button  type="submit" class="btn btn-dark  col-md-12 mt-5">Enregistrer</button>
+  
+  </div>
+
+</form>
+
+
+
+<script>
+
+ function addPension() {
+
+        var divInputs = document.getElementById("inputs");
+        var newInput = document.createElement("div");
+        var div_error = document.createElement("div");
+        newInput.setAttribute('id','new_input');
+        newInput.setAttribute('class','new_input');
+        newInput.innerHTML = `
+        <div class="form-row ">
+            <div class="form-type col-md-6">
+                <label for="inputEmail4">Pension</label>
+                <input type="text" class="form-control" id="inputEmail4">
+            </div>
+        </div>`;
+            divInputs.appendChild(newInput);   
+
+    }
+    function addAdresse() {
+
+        var divInputs = document.getElementById("inputs");
+        var newInput = document.createElement("div");
+        var div_error = document.createElement("div");
+        newInput.setAttribute('id','new_input');
+        newInput.setAttribute('class','new_input');
+        newInput.innerHTML = `
+        <div class="form-row ">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Adresse</label>
+                <input type="text" class="form-control" id="inputEmail4">
+            </div>
+        </div>`;
+            divInputs.appendChild(newInput);   
+
+    }
+
+    function addPensionNum() {
+
+        var divInputs = document.getElementById("inputs");
+        var newInput = document.createElement("div");
+        var div_error = document.createElement("div");
+        newInput.setAttribute('id','new_input');
+        newInput.setAttribute('class','new_input');
+        newInput.innerHTML = `
+        <div class="form-row ">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Pension</label>
+                <input type="text" class="form-control" id="inputEmail4">
+            </div>
+            <div class="form-group col-md-6">
+            <label for="inputPassword4">Numéro de chambre</label>
+            <input type="text" class="form-control" id="inputPassword4">
+            </div>
+        </div>`;
+            divInputs.appendChild(newInput);   
+
+    }
+
+        
+
+        
+            function add(){
+                var type = document.getElementById("type_reponse").value;
+                 if (type == 'non_boursier') {
+                    return addAdresse();
+                }
+                else if(type == 'boursier_logé'){
+                    return addPensionNum();
+                }else{
+                    return addPension();
+                } 
+            }
+        
+
+</script>
 {% endblock %}
