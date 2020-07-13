@@ -4,8 +4,9 @@
         <meta charset="UTF-8">
         <title>Brogrammers</title>
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" >
-        <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap.min.css') }}" >
+        {# <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap.min.css') }}" > #}
         <link rel="stylesheet" href="{{ asset('css/style.css') }}" >
+        <link rel="stylesheet" href="//cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" >
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -18,8 +19,13 @@
                     Gestion d'allocation des chambres
                 </div>
                 <ul>
-                    <li class="{% if current == 'students' %}active{% endif %}"><a href="{{ path('students') }}">Liste des étudiants {{ current }} </a></li>
-                    <li class="{% if current == 'rooms' %}active{% endif %}"><a href="{{ path('rooms') }}">Liste des chambres {{ current }} </a></li>
+                    {% if app.user %}
+                        <li class="{% if current is defined and current == 'students' %}active{% endif %}"><a href="{{ path('students') }}">Liste des étudiants</a></li>
+                        <li class="{% if current is defined and current == 'rooms' %}active{% endif %}"><a href="{{ path('rooms') }}">Liste des chambres</a></li>
+                        <li><a href="{{ path('app_logout') }}">Déconnexion</a></li>
+                    {% else %}
+                        <li class="active"><a href="{{ path('app_login') }}">Connexion</a></li>
+                    {% endif %}
                 </ul>
             </div>
             <div class="content">

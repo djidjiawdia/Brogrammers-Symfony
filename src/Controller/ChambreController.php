@@ -32,7 +32,7 @@ class ChambreController extends AbstractController
     }
 
     /**
-     * @Route("/chambre/nouveau", name="add_room")
+     * @Route("/chambres/nouveau", name="add_room")
      */
     public function add(Request $request, EntityManagerInterface $em)
     {

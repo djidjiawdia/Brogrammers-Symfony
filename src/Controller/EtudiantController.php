@@ -5,64 +5,23 @@ namespace App\Controller;
 use App\Repository\EtudiantRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ */
 class EtudiantController extends AbstractController
 {
     /**
-     * @Route("/", name="students")
+     * @Route("/etudiants", name="students")
      */
-    public function index()
+    public function index(EtudiantRepository $repo)
     {
         return $this->render('etudiant/index.html.twig', [
             'current' => 'students',
+            'etudiants' => $repo->findAll()
         ]);
-    }
-
-    /**
-     * @Route("/etudiant/showTable", name="student_table")
-     */
-    public function getStudents(EtudiantRepository $repo) : Response
-    {
-        extract($_POST);
-        $option = [];
-        if(!empty($mat)){
-            $option = ["matricule" => $mat];
-        }elseif(!empty($type)){
-            $option = ["type" => $type];
-        }elseif(!empty($mat) && !empty($type)){
-            $option = ["matricule" => $mat, "type" => $type];
-        }
-        $etudiant = $repo->findBy($option, [], $limit, $offset);
-        $body = '';
-        foreach($etudiant as $d){
-            $tr = '
-                <tr id="'. $d->getId() .'">
-                    <td>'.$d->getMatricule() .'</td>
-                    <td class="edit" id="setPrenom">'. $d->getPrenom().'</td>
-                    <td class="edit" id="setNom">'. strtoupper($d->getNom()).'</td>
-                    <td class="edit" id="setEmail">'. $d->getEmail().'</td>
-                    <td class="edit" id="setTel">'. $d->getTel().'</td>';
-                    if($d->getType() == "boursier"){
-                        $tr .= '<td>'. $d->getMontant().'</td>';
-                        if($d->getStatut() == "logier"){
-                            $tr .= '<td>'. $d->getChambre()->getNumero().'</td>';
-                        }else{
-                            $tr .= '<td>Néant</td>';
-                        }
-                    }else{
-                        $tr .= '<td>XOF</td>
-                            <td>'. $d->getAdresse().'</td>';
-                    }
-                    $tr .= '<td class="text-danger">
-                        <button class="btn btn-danger deleteStud" id="'. $d->getId() .'"><span><i class="fas fa-trash"></i></span></button>
-                    </td>
-                </tr>
-            ';
-            $body .= $tr;
-        }
-        return $this->json(["code" => 200, "message" => $body]);
     }
 
     /**
@@ -76,7 +35,7 @@ class EtudiantController extends AbstractController
     }
 
     /**
-     * @Route("/etudiant/update", name="update_student")
+     * @Route("/etudiants/update", name="update_student")
      */
     public function update(EtudiantRepository $repo, EntityManagerInterface $em) : Response
     {
@@ -88,7 +47,7 @@ class EtudiantController extends AbstractController
     }
 
     /**
-     * @Route("/etudiant/delete", name="delete_student")
+     * @Route("/etudiants/delete", name="delete_student")
      */
     public function delete(EtudiantRepository $repo, EntityManagerInterface $em) : Response
     {

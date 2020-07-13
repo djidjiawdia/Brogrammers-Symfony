@@ -9,7 +9,7 @@
             Ajouter
         </a>
     </div>
-    <div>
+    {# <div>
         <form class="d-flex justify-content-end mt-2" action="" method="post" id="formSearch">
             <div class="row align-items-center">
                 <div class="col-8 d-flex justify-content-end">
@@ -26,10 +26,10 @@
                 </div>
             </div>
         </form>
-    </div>
-    <div class="col-11">
-        <div class="table-responsive" id="scrollZone">
-            <table class="table table-bordered table-hover text-center">
+    </div> #}
+    <div class="col-11 mt-2">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover text-center" id="dataStudent">
                 <thead>
                     <tr>
                         <th>Matricule</th>
@@ -42,8 +42,30 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="tbody">
-
+                <tbody>
+                    {% for d in etudiants %}
+                        <tr id="{{d.id}}">
+                            <td>{{ d.matricule }}</td>
+                            <td class="edit" id="setPrenom">{{ d.prenom }}</td>
+                            <td class="edit" id="setNom">{{ d.nom | upper }}</td>
+                            <td class="edit" id="setEmail">{{ d.email }}</td>
+                            <td class="edit" id="setTel">{{ d.tel }}</td>
+                            {% if d.type == "boursier" %}
+                                <td>{{ d.montant }}</td>
+                                {% if d.statut == "logier" %}
+                                    <td>{{ d.chambre.numero }}</td>
+                                {% else %}
+                                    <td>Néant</td>
+                                {% endif %}
+                            {% else %}
+                                <td>XOF</td>
+                                <td>{{ d.adresse }}</td>
+                            {% endif %}
+                            <td class="text-danger">
+                                <button class="btn btn-danger deleteStud" id="{{ d.id }}"><span><i class="fas fa-trash"></i></span></button>
+                            </td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -51,8 +73,71 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+        $(document).ready(function() { 
+            $("#dataStudent").DataTable({
+                paging: false,
+                srollY: 100
+            }); 
+        });
+        $(document).on('dblclick', '.edit', function(e){
+            e.preventDefault();
+            $(this).prop('disabled', true);
+            text = $(this).text();
+            const id = $(this).parent().attr("id");
+            const name = $(this).attr("id");
+            const input = `<input class="form-control w-100" type="text" id="inputChange" data-id="${id}" name="${name}" value="${text}" placeholder="Entrer ${name}">`; 
+            $(this).html(input);
+            $(this).children().focus();
+        })
+        $(document).on('focusout', '.edit', function(){
+            $(this).html(text);
+        });
+        $(document).on('keyup', ".edit", function(e){
+            if(e.keyCode == 27){ // Touche echap
+                $(this).html(text);
+            }else if(e.keyCode == 13){ // Touche entrée
+                const data = {
+                    "id": $("#inputChange").attr("data-id"),
+                    "champ": $(this).attr("id"),
+                    "val": $("#inputChange").val()
+                };
+                if(data.val == ''){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else if(data.champ == 'setNom' && !validWithRegex(data.val, /^[A-Za-z]*$/)){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else if(data.champ == 'setPrenom' && !validWithRegex(data.val, /^[A-Za-z ]*$/)){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else if(data.champ == 'setEmail' && !validWithRegex(data.val, /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else if(data.champ == 'setTel' && !validWithRegex(data.val, /(7[7860])+([0-9]{7})$/)){
+                    $("#inputChange").addClass("is-invalid");
+                    return;
+                }else{
+                    $.ajax({
+                        url: '{{ path('update_student') }}',
+                        type: 'POST',
+                        data: data,
+                        dataType: 'json',
+                        success: function(res){
+                            if(res.code == 200){
+                                alert(res.message);
+                            }else{
+                                alert(res.message);
+                                return;
+                            }        
+                        }
+                    });
+                    $(this).html($("#inputChange").val());
+                }
+            }
+        })
+    </script>
+    {# <script>
         let text = '';
         $(document).ready(function(){
             let offset = 0;
@@ -142,61 +227,6 @@
             }
         });
 
-        $(document).on('dblclick', '.edit', function(e){
-            e.preventDefault();
-            $(this).prop('disabled', true);
-            text = $(this).text();
-            const id = $(this).parent().attr("id");
-            const name = $(this).attr("id");
-            const input = `<input class="form-control w-100" type="text" id="inputChange" data-id="${id}" name="${name}" value="${text}" placeholder="Entrer ${name}">`; 
-            $(this).html(input);
-            $(this).children().focus();
-        })
-        $(document).on('focusout', '.edit', function(){
-            $(this).html(text);
-        });
-        $(document).on('keyup', ".edit", function(e){
-            if(e.keyCode == 27){ // Touche echap
-                $(this).html(text);
-            }else if(e.keyCode == 13){ // Touche entrée
-                const data = {
-                    "id": $("#inputChange").attr("data-id"),
-                    "champ": $(this).attr("id"),
-                    "val": $("#inputChange").val()
-                };
-                if(data.val == ''){
-                    $("#inputChange").addClass("is-invalid");
-                    return;
-                }else if(data.champ == 'setNom' && !validWithRegex(data.val, /^[A-Za-z]*$/)){
-                    $("#inputChange").addClass("is-invalid");
-                    return;
-                }else if(data.champ == 'setPrenom' && !validWithRegex(data.val, /^[A-Za-z ]*$/)){
-                    $("#inputChange").addClass("is-invalid");
-                    return;
-                }else if(data.champ == 'setEmail' && !validWithRegex(data.val, /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)){
-                    $("#inputChange").addClass("is-invalid");
-                    return;
-                }else if(data.champ == 'setTel' && !validWithRegex(data.val, /(7[7860])+([0-9]{7})$/)){
-                    $("#inputChange").addClass("is-invalid");
-                    return;
-                }else{
-                    $.ajax({
-                        url: '{{ path('update_student') }}',
-                        type: 'POST',
-                        data: data,
-                        dataType: 'json',
-                        success: function(res){
-                            if(res.code == 200){
-                                alert(res.message);
-                            }else{
-                                alert(res.message);
-                                return;
-                            }        
-                        }
-                    });
-                    $(this).html($("#inputChange").val());
-                }
-            }
-        })
-    </script>
+        
+    </script> #}
 {% endblock %}
