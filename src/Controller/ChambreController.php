@@ -3,17 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Chambre;
+use App\Entity\Etudiant;
 use App\Form\ChambreType;
 use App\Repository\ChambreRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ChambreController extends AbstractController
 {
     private $repo;
-    private $cuurent;
+    private $current;
 
     public function __construct(ChambreRepository $repo)
     {
@@ -22,17 +24,40 @@ class ChambreController extends AbstractController
     }
 
     /**
-     * @Route("/chambres", name="rooms")
+     * @Route("/chambres", name="rooms",methods={"GET"})
      */
-    public function index()
+    public function index(Request $request,ChambreRepository $chambreRepository): Response
     {
-        return $this->render('chambre/index.html.twig', [
-            'current' => $this->current
+       $chambre=$chambreRepository->findAll();
+       foreach ($chambre as $key => $value) {
+           $current[]=[
+            'id'=> $value->getId(),
+            'numero' =>$value->getNumero(),
+           'type' =>$value->getType(),
+           'batiment' =>$value->getBatiment()->getId()
+        
+       ];
+       }
+             return $this->render('chambre/index.html.twig', [
+            'current' =>  $current
         ]);
+    }
+    
+
+    /**
+     * @Route("chambres/delete", name="delete_chambre")
+     */
+    public function delete(ChambreRepository $repo, EntityManagerInterface $em) : Response
+    {
+        $chambre = $repo->findOneBy(['id' => $_POST['id']]);
+        $em->remove($chambre);
+        $em->flush();
+        return $this->json(['code' => 200, 'message' => 'supprimé'], 200);
+        
     }
 
     /**
-     * @Route("/chambre/nouveau", name="add_room")
+     * @Route("/chambres/nouveau", name="add_room")
      */
     public function add(Request $request, EntityManagerInterface $em)
     {
@@ -58,3 +83,4 @@ class ChambreController extends AbstractController
         ]);
     }
 }
+

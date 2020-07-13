@@ -5,8 +5,11 @@
         <title>Brogrammers</title>
         <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}" >
         <link rel="stylesheet" href="{{ asset('css/dataTables.bootstrap.min.css') }}" >
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" >
         <link rel="stylesheet" href="{{ asset('css/style.css') }}" >
-        {% block stylesheets %}{% endblock %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        {% block stylesheets %}
+        {% endblock %}
     </head>
     <body>
         <div class="main">
@@ -35,6 +38,7 @@
         <script src="{{ asset('js/all.min.js') }}"></script>
         <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
         <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
         <script src="{{ asset('js/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('js/validator.js') }}"></script>
         <script src="{{ asset('js/script.js') }}"></script>

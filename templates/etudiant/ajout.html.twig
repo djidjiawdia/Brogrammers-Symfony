@@ -1,142 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Ajouter Etudiant{% endblock %}
+  {% block stylesheets %}
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}" >
+  {% endblock %}
 
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 {% block body %}
- <div class='container'>
-    <div class="container  d-flex align-items-center justify-content-center mt-3">
+ <div class="d-flex justify-content-center align-items-center h-100">
+        <div class="alert" id="alert">
+        </div>
+  {{form_start(form)}}
+  <div class="row">
 
-<form class="border col-md-6 rounded p-4 contenue" >
-  <div class="form-row ">
-  
-    <div class="form-group col-md-6">
-    
-      <label for="inputEmail4">Nom</label>
-      <input type="text" class="form-control" id="inputEmail4">
+    <div class="col-sm-2 form-group py-1">
+        <label for="">Matricule</label>
+        {{ form_widget(form.matricule,  {'attr': {'placeholder':'Ex: 2020 DI DJ 0001 ', 'title':'Matricule', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+        <span class="text-danger" id="erreur">{{ form_errors(form.matricule) }}</span>
     </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Prenom</label>
-      <input type="text" class="form-control" id="inputPassword4">
+     <div class="col-sm-2 form-group py-1">
+        <label for="">Nom</label>
+        {{ form_widget(form.nom,  {'attr': {'placeholder':'Ex: Sow', 'title':'Nom', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+        <span class="text-danger" id="erreur">{{ form_errors(form.nom) }}</span>
+    </div>
+    <div class="col-sm-2 form-group py-1">
+        <label for="">Prenom</label>
+        {{ form_widget(form.prenom,  {'attr': {'placeholder':'Ex: Zoumana', 'title':'Prenom', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+        <span class="text-danger" id="erreur">{{ form_errors(form.prenom) }}</span>
+    </div>
+    <div class="col-sm-2 form-group py-1">
+        <label for="">Email</label>
+        {{ form_widget(form.email,  {'attr': {'placeholder':'Ex: Sowpapi@gmail.com ', 'title':'Email', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+        <span class="text-danger" id="erreur">{{ form_errors(form.email) }}</span>
+    </div>
+    <div class="col-sm-2 form-group py-1">
+        <label for="">Téléphone</label>
+        {{ form_widget(form.tel,  {'attr': {'placeholder':'Ex: 77-146-22-99', 'title':'Tel', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+        <span class="text-danger" id="erreur">{{ form_errors(form.tel) }}</span>
+    </div>
+    <div class="col-sm-2 form-group py-1">
+         <label for="">Type</label>
+        {{ form_widget(form.type,  {'attr': {'placeholder':'Ex: Type ', 'title':'Type', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+        <span class="text-danger" id="erreur">{{ form_errors(form.type) }}</span>
+     </div>   
+    <div class="col-sm-2 form-group py-1">   
+        <label for="">Pension</label>
+        {{ form_widget(form.pension,  {'attr': {'placeholder':'Ex:', 'title':'', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+        <span class="text-danger" id="erreur">{{ form_errors(form.pension) }}</span>
+    </div>
+    <div class="col-sm-2 form-group py-1">
+        <label for="">Montant</label>
+        {{ form_widget(form.montant,  {'attr': {'placeholder':'Ex: ', 'title':'', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+       <span class="text-danger" id="erreur">{{ form_errors(form.montant) }}</span>
+    </div>
+    <div class="col-sm-2 form-group py-1">
+        <label for="">Statut</label>
+        {{ form_widget(form.statut,  {'attr': {'placeholder':'Ex: Logé ou Non_Logé ', 'title':'Prenom', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+        <span class="text-danger" id="erreur">{{ form_errors(form.statut) }}</span>
+    </div>
+    <div class="col-sm-2 form-group py-1">
+        <label for="">Adresse</label>
+       {{ form_widget(form.adresse,  {'attr': {'placeholder':'Ex: Hlm1 ', '':'', 'class':'form-control bg-transparent border-top-0 border-left-0 border-right-0','id':'input'}})}}
+       <span class="text-danger" id="erreur">{{ form_errors(form.adresse) }}</span>
     </div>
 
+    <div class="col-sm-8 form-group py-1">
+      <button type="submit" class="btn btn-primary btn-sm">Valider</button>
+    </div>
+      {{form_end(form)}}
   </div>
-
-
-  <div class="form-row">
-  
-    <div class="form-group col-md-6">
-    
-        <label for="inputEmail4">Email</label>
-        <input type="email" class="form-control" id="inputEmail4">
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputPassword4">Telephone</label>
-      <input type="text" class="form-control" id="inputPassword4">
-    </div>
-
-  </div>
-
-
-<div class="form-row">
-     
-   <div class="form-type col-md-5 mt-4 pt-2 ">
-        <select  class="custom-select" name="type_reponse" id="type_reponse" required>
-            <option value="0" selected>Entrer le type d'étudiant</option>
-            <option value="texte"onclick="addPension()" >Boursier non logé</option>
-            <option value="boursier_logé" onclick='addPensionNum()' >Boursier logé</option>
-            <option value="non_boursier" onclick="addAdresse()"> Non boursier</option>
-        </select>
-        <img src="/img/ok.jpg" style="height: 20px;" class='genere' id="genere" onclick="add()" alt="ajout" >
-    </div>
-</div>
-    <div id="inputs">
-
-    </div>
-                            
-   
-    <button  type="submit" class="btn btn-dark  col-md-12 mt-5">Enregistrer</button>
-  
-  </div>
-
-</form>
-
-
-
-<script>
-
- function addPension() {
-
-        var divInputs = document.getElementById("inputs");
-        var newInput = document.createElement("div");
-        var div_error = document.createElement("div");
-        newInput.setAttribute('id','new_input');
-        newInput.setAttribute('class','new_input');
-        newInput.innerHTML = `
-        <div class="form-row ">
-            <div class="form-type col-md-6">
-                <label for="inputEmail4">Pension</label>
-                <input type="text" class="form-control" id="inputEmail4">
-            </div>
-        </div>`;
-            divInputs.appendChild(newInput);   
-
-    }
-    function addAdresse() {
-
-        var divInputs = document.getElementById("inputs");
-        var newInput = document.createElement("div");
-        var div_error = document.createElement("div");
-        newInput.setAttribute('id','new_input');
-        newInput.setAttribute('class','new_input');
-        newInput.innerHTML = `
-        <div class="form-row ">
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">Adresse</label>
-                <input type="text" class="form-control" id="inputEmail4">
-            </div>
-        </div>`;
-            divInputs.appendChild(newInput);   
-
-    }
-
-    function addPensionNum() {
-
-        var divInputs = document.getElementById("inputs");
-        var newInput = document.createElement("div");
-        var div_error = document.createElement("div");
-        newInput.setAttribute('id','new_input');
-        newInput.setAttribute('class','new_input');
-        newInput.innerHTML = `
-        <div class="form-row ">
-            <div class="form-group col-md-6">
-                <label for="inputEmail4">Pension</label>
-                <input type="text" class="form-control" id="inputEmail4">
-            </div>
-            <div class="form-group col-md-6">
-            <label for="inputPassword4">Numéro de chambre</label>
-            <input type="text" class="form-control" id="inputPassword4">
-            </div>
-        </div>`;
-            divInputs.appendChild(newInput);   
-
-    }
-
-        
-
-        
-            function add(){
-                var type = document.getElementById("type_reponse").value;
-                 if (type == 'non_boursier') {
-                    return addAdresse();
-                }
-                else if(type == 'boursier_logé'){
-                    return addPensionNum();
-                }else{
-                    return addPension();
-                } 
-            }
-        
-
-</script>
 {% endblock %}

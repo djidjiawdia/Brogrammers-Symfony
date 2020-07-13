@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Etudiant;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,7 +18,13 @@ class EtudiantType extends AbstractType
             ->add('prenom')
             ->add('email')
             ->add('tel')
-            ->add('type')
+            ->add('type', ChoiceType::class, [
+                "choices" => [
+                    "Boursier" => "bousier",
+                    "Non Boursier" => "non_boursier"
+                ]
+            
+            ])
             ->add('pension')
             ->add('montant')
             ->add('statut')

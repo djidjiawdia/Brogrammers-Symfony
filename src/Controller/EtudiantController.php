@@ -9,19 +9,23 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\component\form\FormView;
+use Symfony\Component\HttpFoundation\Request;
 
 class EtudiantController extends AbstractController
 {
     /**
-     * @Route("/", name="students")
+     * @Route("/etudiants", name="students")
      */
-    public function index()
+    public function index(EtudiantRepository $etudiantRepository)
     {
+        $etudiants= $etudiantRepository-> findAll();
+
         return $this->render('etudiant/index.html.twig', [
-            'current' => 'students',
+            'current' => $etudiants,
         ]);
     }
-
+    
     /**
      * @Route("/etudiant/showTable", name="student_table")
      */
@@ -68,19 +72,31 @@ class EtudiantController extends AbstractController
     }
 
    /**
-     * @Route("/etudiant/add", name="add_student")
+     * @Route("/etudiant/add", name="add_student",methods={"POST", "GET"})
      */
-    public function add()
+    public function add(Request $request, EntityManagerInterface $em): Response
     {
         $etudiant=new Etudiant();
         $form = $this->createForm(EtudiantType::class, $etudiant);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isvalid())
+        {
+            //dd($etudiant);
+           //$em= $this->getDoctrine()->getManager();
+           $em->persist($etudiant);
+           $em->flush();
+
+       
+        }
+        //dump($form)
        return $this->render('etudiant/ajout.html.twig', [
         'form' => $form->createView(),
         'current' => 'student'
     ]);
     }
+
     /**
-     * @Route("/etudiant/update", name="update_student")
+     * @Route("/etudiant/update", name="update_student", methods={"GET","POST"})
      */
     public function update(EtudiantRepository $repo, EntityManagerInterface $em) : Response
     {
@@ -102,3 +118,7 @@ class EtudiantController extends AbstractController
         return $this->json(['code' => 200, 'message' => 'supprimé'], 200);
     }
 }
+
+
+
+

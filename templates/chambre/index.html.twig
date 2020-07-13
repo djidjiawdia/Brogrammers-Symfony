@@ -1,4 +1,7 @@
 {% extends 'base.html.twig' %}
+  {% block stylesheets %}
+      
+  {% endblock %}
 
 {% block title %}Chambres{% endblock %}
 
@@ -9,4 +12,67 @@
             Ajouter
         </a>
     </div>
+ 
+ 
+    <div class="mt-2 col-11 table-responsive">
+        <table id="dat" class="table table-bordered table-hover text-center">
+            <thead>
+                <tr>
+                    <th>Numéro Chambre</th>
+                    <th>Type</th>
+                    <th>Bâtiment</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+           {% for element in current %} 
+                <tr>
+                    <td>{{ element.numero }}</td>
+                   <td>{{ element.type }}</td>
+                   <td>{{ element.batiment }}</td>
+                   <td>
+                   <p id="{{element.id}}" class="modifierChambre"><button>Modifier</button></p>
+                   <p id="{{element.id}}" class="deleteChambre"><button style="color:red">Supprimez</button>
+                   </p></td>
+                </tr>
+             {% endfor %}
+            </tbody>
+        </table>
+       
+         
+    </div>
+   
+<script>
+$(document).ready( function () {
+    $('#dat').DataTable();
+} );
+
+ $(document).on("click", ".deleteChambre", function(){
+            const parent = $(this).parents('tr');
+            if(confirm("Voulez-vous supprimer ?")){
+                $.ajax({
+                    url: '{{ path('delete_chambre') }}',
+                    type: 'POST',
+                    data: {id: $(this).attr("id")},
+                    dataType: 'JSON',
+                    success: function(res){
+                        if(res.code == 200){
+                            alert(res.message);
+                            parent.remove();
+                        }
+                    }
+                })
+            }
+        });
+        
+        
+
+ 
+</script>
+
+
+{% endblock %}
+{% block javascript %}
+
+
 {% endblock %}
